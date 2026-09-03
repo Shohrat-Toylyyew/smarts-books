@@ -2,7 +2,7 @@ import { categories } from "@/data/books";
 
 export default function CategoriesPage() {
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-5xl">
+    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
       <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
         Categories
       </h1>

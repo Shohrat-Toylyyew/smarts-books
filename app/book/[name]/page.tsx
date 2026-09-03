@@ -33,7 +33,7 @@ export default async function BookPage({ params }: PageProps) {
   if (!book) notFound();
 
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-5xl">
+    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
       <Link
         href="/"
         className="font-medium text-zinc-500 hover:text-zinc-900 text-sm transition-colors"
@@ -42,7 +42,7 @@ export default async function BookPage({ params }: PageProps) {
       </Link>
 
       <div className="flex sm:flex-row flex-col gap-10 mt-8">
-        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-48 sm:w-56 aspect-[2/3] overflow-hidden shrink-0">
+        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-48 sm:w-56 aspect-2/3 overflow-hidden shrink-0">
           <Image
             src={book.poster}
             alt={`Cover of ${book.name}`}

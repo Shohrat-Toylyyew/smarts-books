@@ -3,7 +3,7 @@ import BookSwiper from "@/components/BookSwiper";
 import Link from "next/link";
 import { slugify } from "@/data/books";
 
-const MAX_BOOKS_PER_CATEGORY = 8;
+const MAX_BOOKS_PER_CATEGORY = 20;
 
 export default function Home() {
   return (
