@@ -1,4 +1,5 @@
-import { categories } from "@/data/books";
+import { categories, getBooksByCategory, slugify } from "@/data/books";
+import Link from "next/link";
 
 export default function CategoriesPage() {
   return (
@@ -10,14 +11,25 @@ export default function CategoriesPage() {
         Explore books by category and find the perfect read for you.
       </p>
       <ul className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10">
-        {categories.map((category) => (
-          <li
-            key={category}
-            className="bg-white p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-colors"
-          >
-            <h2 className="font-medium text-zinc-900 text-lg">{category}</h2>
-          </li>
-        ))}
+        {categories.map((category) => {
+          const count = getBooksByCategory(category).length;
+          return (
+            <li
+              key={category}
+              className="bg-white p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-colors"
+            >
+              <Link
+                href={`/categories/${slugify(category)}`}
+                className="flex justify-between"
+              >
+                <h2 className="font-medium text-zinc-900 text-lg">
+                  {category}
+                </h2>
+                <span className="text-zinc-600">{count}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
