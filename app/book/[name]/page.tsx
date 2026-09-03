@@ -42,12 +42,12 @@ export default async function BookPage({ params }: PageProps) {
       </Link>
 
       <div className="flex sm:flex-row flex-col gap-10 mt-8">
-        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-48 sm:w-56 aspect-2/3 overflow-hidden shrink-0">
+        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-60 sm:w-72 aspect-2/3 overflow-hidden shrink-0">
           <Image
             src={book.poster}
             alt={`Cover of ${book.name}`}
             fill
-            sizes="(min-width: 640px) 224px, 192px"
+            sizes="(min-width: 640px) 288px, 240px"
             className="object-cover"
           />
         </div>
@@ -60,7 +60,7 @@ export default async function BookPage({ params }: PageProps) {
             {book.author} &middot; {book.year}
           </p>
 
-          <p className="mt-6 max-w-2xl text-zinc-700 text-lg leading-relaxed">
+          <p className="mt-6 text-zinc-700 text-lg leading-relaxed">
             {book.description}
           </p>
 

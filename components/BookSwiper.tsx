@@ -28,23 +28,26 @@ export default function BookSwiper({
   return (
     <Swiper
       modules={[FreeMode, Mousewheel]}
-      spaceBetween={16}
-      slidesPerView={5}
+      slidesPerView="auto"
       freeMode
       mousewheel={{ forceToAxis: true }}
-      className="!px-1 !py-1"
+      className="px-1! py-1!"
     >
       {books.map((book) => (
-        <SwiperSlide key={book.name} className="!h-auto">
+        <SwiperSlide
+          key={book.name}
+          style={{ width: "160px" }}
+          className="mr-4 h-auto!"
+        >
           <BookCard book={book} />
         </SwiperSlide>
       ))}
 
       {showMore && (
-        <SwiperSlide className="!h-auto">
+        <SwiperSlide style={{ width: "160px" }} className="h-auto!">
           <Link
             href={`/categories/${slugify(category)}`}
-            className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-full aspect-[2/3] text-white text-center transition-colors"
+            className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-40 h-60 text-white text-center transition-colors"
           >
             <span className="font-semibold text-lg">Show more</span>
             <span className="text-white/75 text-sm">
