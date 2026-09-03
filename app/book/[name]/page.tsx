@@ -33,7 +33,7 @@ export default async function BookPage({ params }: PageProps) {
   if (!book) notFound();
 
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <Link
         href="/"
         className="font-medium text-zinc-500 hover:text-zinc-900 text-sm transition-colors"
@@ -41,19 +41,19 @@ export default async function BookPage({ params }: PageProps) {
         &larr; Back to home
       </Link>
 
-      <div className="flex sm:flex-row flex-col gap-10 mt-8">
-        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-60 sm:w-72 aspect-2/3 overflow-hidden shrink-0">
+      <div className="flex sm:flex-row flex-col gap-6 sm:gap-10 mt-6 sm:mt-8">
+        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-48 sm:w-72 aspect-2/3 overflow-hidden shrink-0 mx-auto sm:mx-0">
           <Image
             src={book.poster}
             alt={`Cover of ${book.name}`}
             fill
-            sizes="(min-width: 640px) 288px, 240px"
+            sizes="(min-width: 640px) 288px, 192px"
             className="object-cover"
           />
         </div>
 
-        <div className="flex flex-col">
-          <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
+        <div className="flex flex-col min-w-0">
+          <h1 className="font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
             {book.name}
           </h1>
           <p className="mt-3 text-zinc-600 text-lg">
@@ -83,14 +83,14 @@ export default async function BookPage({ params }: PageProps) {
               href={book.downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex justify-center items-center bg-zinc-900 hover:bg-zinc-700 px-6 rounded-full h-12 font-medium text-white transition-colors"
+              className="inline-flex justify-center items-center bg-zinc-900 hover:bg-zinc-700 active:scale-95 px-6 rounded-full h-12 font-medium text-white transition-all duration-200 hover:shadow-md"
             >
               Download
             </a>
             {book.series ? (
               <Link
                 href={`/serie/${getSeriesSlug(book.series)}`}
-                className="inline-flex justify-center items-center px-6 border border-zinc-200 hover:border-zinc-400 rounded-full h-12 font-medium text-zinc-900 transition-colors"
+                className="inline-flex justify-center items-center px-6 border border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 active:scale-95 rounded-full h-12 font-medium text-zinc-900 transition-all duration-200"
               >
                 Part of {book.series}
               </Link>

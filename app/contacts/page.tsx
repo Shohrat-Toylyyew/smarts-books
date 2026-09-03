@@ -27,11 +27,11 @@ const contactDetails = [
 
 export default function ContactsPage() {
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
-      <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
+      <h1 className="font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
         Contacts
       </h1>
-      <p className="mt-4 max-w-xl text-zinc-600 text-lg">
+      <p className="mt-4 text-zinc-600 text-lg">
         Questions, suggestions or found a bug? We would love to hear from you.
       </p>
 

@@ -19,7 +19,7 @@ export default function ContactForm() {
   }
 
   const inputClasses =
-    "w-full p-3 border border-zinc-200 focus:border-zinc-400 rounded-lg outline-none transition-colors";
+    "w-full p-3 border border-zinc-200 focus:border-zinc-400 focus:ring-2 focus:ring-zinc-200 focus:outline-none rounded-lg transition-all duration-200";
 
   return (
     <form
@@ -67,7 +67,7 @@ export default function ContactForm() {
 
       <button
         type="submit"
-        className="w-full bg-zinc-900 hover:bg-zinc-700 p-3 rounded-lg font-medium text-white transition-colors"
+        className="w-full bg-zinc-900 hover:bg-zinc-700 active:scale-[0.98] p-3 rounded-lg font-medium text-white transition-all duration-200 hover:shadow-md"
       >
         Send message
       </button>

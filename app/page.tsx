@@ -7,7 +7,7 @@ const MAX_BOOKS_PER_CATEGORY = 20;
 
 export default function Home() {
   return (
-    <div className="flex-1 mx-auto px-6 py-10 w-full max-w-7xl">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-8 sm:py-10 w-full max-w-7xl">
       {categories.map((category) => {
         const categoryBooks = getBooksByCategory(category);
         const shownBooks = categoryBooks.slice(0, MAX_BOOKS_PER_CATEGORY);

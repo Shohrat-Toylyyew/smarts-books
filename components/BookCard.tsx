@@ -11,9 +11,9 @@ export default function BookCard({ book }: BookCardProps) {
   return (
     <Link
       href={`/book/${getBookSlug(book)}`}
-      className="group flex flex-col h-full"
+      className="group flex flex-col h-full transition-transform duration-300 hover:-translate-y-1"
     >
-      <div className="relative w-40 h-60 bg-zinc-100 border border-zinc-200 rounded-xl overflow-hidden shrink-0">
+      <div className="relative w-40 h-60 bg-zinc-100 border border-zinc-200 group-hover:border-zinc-300 group-hover:shadow-lg rounded-xl overflow-hidden shrink-0 transition-all duration-300">
         <Image
           src={book.poster}
           alt={`Обложка: ${book.name}`}

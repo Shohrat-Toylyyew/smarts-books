@@ -22,8 +22,8 @@ const stats = [
 
 export default function AboutPage() {
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
-      <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
+      <h1 className="font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
         About
       </h1>
       <p className="mt-4 max-w-2xl text-zinc-600 text-lg">
@@ -33,7 +33,7 @@ export default function AboutPage() {
         Turkish.
       </p>
 
-      <ul className="gap-4 grid grid-cols-2 lg:grid-cols-4 mt-10">
+      <ul className="gap-4 grid grid-cols-2 sm:grid-cols-4 mt-10">
         {stats.map((stat) => (
           <li
             key={stat.label}

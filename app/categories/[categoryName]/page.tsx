@@ -23,7 +23,7 @@ export default async function CategoryBooksPage({ params }: PageProps) {
   const categoryBooks = getBooksByCategory(category);
 
   return (
-    <div className="mx-auto w-full flex-1 max-w-7xl px-6 py-16">
+    <div className="mx-auto w-full flex-1 max-w-7xl px-4 sm:px-6 py-10 sm:py-16">
       <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
         {category}
       </h1>

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function CategoriesPage() {
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
         Categories
       </h1>
@@ -16,7 +16,7 @@ export default function CategoriesPage() {
           return (
             <li
               key={category}
-              className="bg-white p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-colors"
+              className="bg-white p-6 border border-zinc-200 hover:border-zinc-400 hover:shadow-md hover:-translate-y-0.5 rounded-xl transition-all duration-200"
             >
               <Link
                 href={`/categories/${slugify(category)}`}

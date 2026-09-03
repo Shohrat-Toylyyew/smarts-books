@@ -38,7 +38,7 @@ export default async function SeriesPage({ params }: PageProps) {
   if (!series) notFound();
 
   return (
-    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-7xl">
+    <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <Link
         href="/"
         className="font-medium text-zinc-500 hover:text-zinc-900 text-sm transition-colors"
@@ -46,7 +46,7 @@ export default async function SeriesPage({ params }: PageProps) {
         &larr; Back to home
       </Link>
 
-      <h1 className="mt-8 font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
+      <h1 className="mt-6 sm:mt-8 font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
         {series.name}
       </h1>
       <p className="mt-4 text-zinc-600 text-lg">
@@ -59,7 +59,7 @@ export default async function SeriesPage({ params }: PageProps) {
           <li key={book.name}>
             <Link
               href={`/book/${getBookSlug(book)}`}
-              className="group block bg-white p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-colors"
+              className="group block bg-white p-6 border border-zinc-200 hover:border-zinc-400 hover:shadow-md rounded-xl transition-all duration-200"
             >
               <div className="flex items-start gap-4">
                 <div className="relative bg-zinc-100 rounded-lg w-16 aspect-[2/3] overflow-hidden shrink-0">
