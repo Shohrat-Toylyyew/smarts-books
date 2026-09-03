@@ -1,21 +1,37 @@
+import { categories, getBooksByCategory } from "@/data/books";
+import BookSwiper from "@/components/BookSwiper";
 import Link from "next/link";
+import { slugify } from "@/data/books";
+
+const MAX_BOOKS_PER_CATEGORY = 8;
 
 export default function Home() {
   return (
-    <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col items-start justify-center px-6 py-16">
-      <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
-        Welcome to Smarts Books
-      </h1>
-      <p className="mt-4 max-w-xl text-lg text-zinc-600">
-        Discover your next read. Browse a curated collection of books and explore
-        categories that match your interests.
-      </p>
-      <Link
-        href="/categories"
-        className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-zinc-900 px-6 font-medium text-white transition-colors hover:bg-zinc-700"
-      >
-        Browse Categories
-      </Link>
+    <div className="flex-1 mx-auto px-6 py-10 w-full max-w-7xl">
+      {categories.map((category) => {
+        const categoryBooks = getBooksByCategory(category);
+        const shownBooks = categoryBooks.slice(0, MAX_BOOKS_PER_CATEGORY);
+        const showMore = categoryBooks.length > MAX_BOOKS_PER_CATEGORY;
+
+        if (categoryBooks.length > 0) {
+          return (
+            <section key={category} className="mt-10 first:mt-0">
+              <Link
+                href={`/categories/${slugify(category)}`}
+                className="mb-4 font-bold text-zinc-900 text-3xl tracking-tight"
+              >
+                {category}
+              </Link>
+              <BookSwiper
+                category={category}
+                books={shownBooks}
+                totalCount={categoryBooks.length}
+                showMore={showMore}
+              />
+            </section>
+          );
+        }
+      })}
     </div>
   );
 }

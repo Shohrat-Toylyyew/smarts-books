@@ -1,30 +1,21 @@
-const categories = [
-  "Fiction",
-  "Non-Fiction",
-  "Science",
-  "Technology",
-  "History",
-  "Biography",
-  "Fantasy",
-  "Mystery",
-];
+import { categories } from "@/data/books";
 
 export default function CategoriesPage() {
   return (
-    <div className="mx-auto w-full max-w-5xl flex-1 px-6 py-16">
-      <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 sm:text-5xl">
+    <div className="flex-1 mx-auto px-6 py-16 w-full max-w-5xl">
+      <h1 className="font-semibold text-zinc-900 text-4xl sm:text-5xl tracking-tight">
         Categories
       </h1>
-      <p className="mt-4 max-w-xl text-lg text-zinc-600">
+      <p className="mt-4 max-w-xl text-zinc-600 text-lg">
         Explore books by category and find the perfect read for you.
       </p>
-      <ul className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <ul className="gap-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10">
         {categories.map((category) => (
           <li
             key={category}
-            className="rounded-xl border border-zinc-200 bg-white p-6 transition-colors hover:border-zinc-400"
+            className="bg-white p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-colors"
           >
-            <h2 className="text-lg font-medium text-zinc-900">{category}</h2>
+            <h2 className="font-medium text-zinc-900 text-lg">{category}</h2>
           </li>
         ))}
       </ul>
