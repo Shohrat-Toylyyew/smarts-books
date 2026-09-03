@@ -48,6 +48,7 @@ export type Language = (typeof languages)[number];
 
 /** A single book entry in the catalog. */
 export interface Book {
+  id: number;
   /** Book title. */
   name: string;
   /** Short synopsis. */
