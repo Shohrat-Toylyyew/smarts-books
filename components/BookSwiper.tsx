@@ -36,7 +36,7 @@ export default function BookSwiper({
       slidesPerView="auto"
       freeMode
       mousewheel={{ forceToAxis: true }}
-      className="px-1! py-1!"
+      className="px-1! py-1! pt-4!"
     >
       {books.map((book) => (
         <SwiperSlide
@@ -52,7 +52,7 @@ export default function BookSwiper({
         <SwiperSlide style={{ width: "160px" }} className="h-auto!">
           <Link
             href={`/${lang}/categories/${slugify(category)}`}
-            className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-40 h-60 text-white text-center transition-all duration-300 hover:scale-105"
+            className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-40 h-60 text-white text-center hover:scale-105 transition-all duration-300"
           >
             <span className="font-semibold text-lg">{dict.home.showMore}</span>
             <span className="text-white/75 text-sm">

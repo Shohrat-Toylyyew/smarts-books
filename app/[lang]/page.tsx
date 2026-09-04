@@ -28,10 +28,7 @@ export default async function Home({ params }: PageProps) {
 
         if (categoryBooks.length > 0) {
           return (
-            <section
-              key={category}
-              className="flex flex-col gap-4 mt-10 first:mt-0"
-            >
+            <section key={category} className="mt-10 first:mt-0">
               <Link
                 href={`/${lang}/categories/${slugify(category)}`}
                 className="after:bottom-0 after:absolute relative after:inset-x-0 after:bg-zinc-900 w-max after:h-1 font-bold text-zinc-900 text-3xl tracking-tight after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300"
