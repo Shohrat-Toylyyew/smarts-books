@@ -11,7 +11,13 @@ export function isLocale(value: string): value is Locale {
 }
 
 export type Dictionary = {
-  nav: { home: string; categories: string; about: string; contacts: string };
+  nav: {
+    home: string;
+    categories: string;
+    authors: string;
+    about: string;
+    contacts: string;
+  };
   /** Localized display names for every category (keys are the English names). */
   categoryNames: Record<Category, string>;
   /** Localized display names for every book language (keys are the English names). */
@@ -24,6 +30,14 @@ export type Dictionary = {
   };
   categories: { title: string; subtitle: string };
   category: { booksInCategoryOne: string; booksInCategoryMany: string };
+  authors: { title: string; subtitle: string };
+  author: {
+    booksOne: string;
+    booksMany: string;
+    born: string;
+    died: string;
+    books: string;
+  };
   book: { back: string; download: string; partOf: string };
   serie: { back: string; booksOne: string; booksMany: string };
   about: {
@@ -66,6 +80,7 @@ const en: Dictionary = {
   nav: {
     home: "Home",
     categories: "Categories",
+    authors: "Authors",
     about: "About",
     contacts: "Contacts",
   },
@@ -97,6 +112,17 @@ const en: Dictionary = {
   category: {
     booksInCategoryOne: "book in category",
     booksInCategoryMany: "books in category",
+  },
+  authors: {
+    title: "Authors",
+    subtitle: "Meet the writers behind the books in our catalog.",
+  },
+  author: {
+    booksOne: "book",
+    booksMany: "books",
+    born: "Born",
+    died: "Died",
+    books: "Books",
   },
   book: { back: "Back to home", download: "Download", partOf: "Part of" },
   serie: {
@@ -152,6 +178,7 @@ const en: Dictionary = {
 const ru: Dictionary = {
   nav: {
     home: "Главная",
+    authors: "Авторы",
     categories: "Категории",
     about: "О нас",
     contacts: "Контакты",
@@ -184,6 +211,17 @@ const ru: Dictionary = {
   category: {
     booksInCategoryOne: "книга в категории",
     booksInCategoryMany: "книг в категории",
+  },
+  authors: {
+    title: "Авторы",
+    subtitle: "Познакомьтесь с авторами книг нашего каталога.",
+  },
+  author: {
+    booksOne: "книга",
+    booksMany: "книг",
+    born: "Родился",
+    died: "Умер",
+    books: "Книги",
   },
   book: { back: "На главную", download: "Скачать", partOf: "Часть серии" },
   serie: {
@@ -239,6 +277,7 @@ const ru: Dictionary = {
 const tr: Dictionary = {
   nav: {
     home: "Ana Sayfa",
+    authors: "Yazarlar",
     categories: "Kategoriler",
     about: "Hakkında",
     contacts: "İletişim",
@@ -271,6 +310,17 @@ const tr: Dictionary = {
   category: {
     booksInCategoryOne: "kategoriye ait kitap",
     booksInCategoryMany: "kategoriye ait kitap",
+  },
+  authors: {
+    title: "Yazarlar",
+    subtitle: "Katalogumuzdaki kitapların yazarlarıyla tanışın.",
+  },
+  author: {
+    booksOne: "kitap",
+    booksMany: "kitap",
+    born: "Doğum",
+    died: "Ölüm",
+    books: "Kitaplar",
   },
   book: {
     back: "Ana sayfaya dön",
@@ -331,6 +381,7 @@ const tk: Dictionary = {
   nav: {
     home: "Baş sahypa",
     categories: "Kategoriýalar",
+    authors: "Awtorlar",
     about: "Biz barada",
     contacts: "Habarlaşmak",
   },
@@ -362,6 +413,17 @@ const tk: Dictionary = {
   category: {
     booksInCategoryOne: "kitap kategoriýada",
     booksInCategoryMany: "kitap kategoriýada",
+  },
+  authors: {
+    title: "Awtorlar",
+    subtitle: "Katalogymyzdaky kitaplaryň awtorlary bilen tanyşyň.",
+  },
+  author: {
+    booksOne: "kitap",
+    booksMany: "kitap",
+    born: "Doguldy",
+    died: "Aradan çykdy",
+    books: "Kitaplar",
   },
   book: {
     back: "Baş sahypa dolan",

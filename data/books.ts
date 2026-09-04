@@ -12,6 +12,7 @@
  */
 
 import { books } from "./books-data";
+import { authors, type Author } from "./authors-data";
 
 // Re-export the raw catalog so it can also be consumed from "@/data/books".
 export { books };
@@ -208,4 +209,44 @@ export function searchBooks(query: string, limit?: number): Book[] {
 /** Looks up a category by its URL slug. */
 export function getCategoryBySlug(slug: string): Category | undefined {
   return categories.find((category) => slugify(category) === slug);
+}
+
+// ---------------------------------------------------------------------------
+// Authors
+// ---------------------------------------------------------------------------
+
+export type { Author };
+export { authors };
+
+/** An author profile enriched with the number of their books in the catalog. */
+export interface AuthorWithCount extends Author {
+  bookCount: number;
+}
+
+/**
+ * All authors that have at least one book in the catalog,
+ * each enriched with their book count.
+ */
+export function getAuthors(): AuthorWithCount[] {
+  return authors
+    .map((author) => ({
+      ...author,
+      bookCount: books.filter((book) => book.author === author.name).length,
+    }))
+    .filter((author) => author.bookCount > 0);
+}
+
+/** Slug for an author name, e.g. "J.K. Rowling" -> "jk-rowling". */
+export function getAuthorSlug(name: string): string {
+  return slugify(name);
+}
+
+/** Looks up an author by their URL slug. */
+export function getAuthorBySlug(slug: string): AuthorWithCount | undefined {
+  return getAuthors().find((author) => getAuthorSlug(author.name) === slug);
+}
+
+/** Returns all books written by the given author (exact `author` string). */
+export function getBooksByAuthor(name: string): Book[] {
+  return books.filter((book) => book.author === name);
 }

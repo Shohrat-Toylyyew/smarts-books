@@ -19,6 +19,7 @@ export default function Header({ lang, dict }: HeaderProps) {
   const navLinks = [
     { href: `/${lang}`, label: dict.nav.home },
     { href: `/${lang}/categories`, label: dict.nav.categories },
+    { href: `/${lang}/authors`, label: dict.nav.authors },
     { href: `/${lang}/about`, label: dict.nav.about },
     { href: `/${lang}/contacts`, label: dict.nav.contacts },
   ];
@@ -36,7 +37,7 @@ export default function Header({ lang, dict }: HeaderProps) {
             alt="Smarts Books logo"
             width={512}
             height={512}
-            className="rounded-md w-12 h-12 sm:w-20 sm:h-20 object-cover"
+            className="rounded-md w-12 sm:w-20 h-12 sm:h-20 object-cover"
           />
         </Link>
 
@@ -50,14 +51,14 @@ export default function Header({ lang, dict }: HeaderProps) {
               <NavLink
                 key={link.href}
                 href={link.href}
-                className="relative py-1 hover:text-zinc-900 transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-zinc-900 after:transition-transform after:duration-300 hover:after:scale-x-100"
+                className="after:bottom-0 after:absolute relative after:inset-x-0 after:bg-zinc-900 py-1 after:h-0.5 hover:text-zinc-900 after:scale-x-0 hover:after:scale-x-100 after:origin-left transition-colors after:transition-transform after:duration-300"
               >
                 {link.label}
               </NavLink>
             ))}
           </nav>
 
-          <div className="w-px h-5 bg-zinc-200" aria-hidden />
+          <div className="bg-zinc-200 w-px h-5" aria-hidden />
           <LanguageSwitcher lang={lang} variant="desktop" />
         </div>
 
@@ -67,7 +68,7 @@ export default function Header({ lang, dict }: HeaderProps) {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
-          className="flex md:hidden justify-center items-center p-2 -mr-2 rounded-lg text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 transition-colors"
+          className="md:hidden flex justify-center items-center hover:bg-zinc-100 -mr-2 p-2 rounded-lg text-zinc-600 hover:text-zinc-900 transition-colors"
         >
           <svg
             className="w-6 h-6"
@@ -95,11 +96,11 @@ export default function Header({ lang, dict }: HeaderProps) {
 
       {/* Mobile / tablet dropdown menu — fixed overlay below the header */}
       {menuOpen && (
-        <nav className="fixed inset-x-0 top-16 sm:top-26 z-10 md:hidden bg-white border-zinc-200 border-b shadow-sm animate-fade-in-down">
+        <nav className="md:hidden top-16 sm:top-26 z-10 fixed inset-x-0 bg-white shadow-sm border-zinc-200 border-b animate-fade-in-down">
           <div className="mx-auto px-4 pt-3 w-full max-w-7xl">
             <SearchBar lang={lang} dict={dict} />
           </div>
-          <ul className="mx-auto px-4 py-3 w-full max-w-7xl space-y-1">
+          <ul className="space-y-1 mx-auto px-4 py-3 w-full max-w-7xl">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <NavLink
