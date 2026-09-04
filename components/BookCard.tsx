@@ -2,15 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Book } from "@/data/books";
 import { getBookSlug } from "@/data/books";
+import type { Locale } from "@/data/i18n";
 
 interface BookCardProps {
   book: Book;
+  lang: Locale;
 }
 
-export default function BookCard({ book }: BookCardProps) {
+export default function BookCard({ book, lang }: BookCardProps) {
   return (
     <Link
-      href={`/book/${getBookSlug(book)}`}
+      href={`/${lang}/book/${getBookSlug(book)}`}
       className="group flex flex-col h-full transition-transform duration-300 hover:-translate-y-1"
     >
       <div className="relative w-40 h-60 bg-zinc-100 border border-zinc-200 group-hover:border-zinc-300 group-hover:shadow-lg rounded-xl overflow-hidden shrink-0 transition-all duration-300">

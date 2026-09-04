@@ -8,6 +8,7 @@ import "swiper/css";
 import "swiper/css/free-mode";
 import type { Book } from "@/data/books";
 import { slugify } from "@/data/books";
+import type { Dictionary, Locale } from "@/data/i18n";
 import BookCard from "./BookCard";
 
 interface BookSwiperProps {
@@ -17,6 +18,8 @@ interface BookSwiperProps {
   totalCount: number;
   /** Whether to render the Show More tile (false when ≤ 8 books). */
   showMore: boolean;
+  lang: Locale;
+  dict: Dictionary;
 }
 
 export default function BookSwiper({
@@ -24,6 +27,8 @@ export default function BookSwiper({
   books,
   totalCount,
   showMore,
+  lang,
+  dict,
 }: BookSwiperProps) {
   return (
     <Swiper
@@ -39,19 +44,19 @@ export default function BookSwiper({
           style={{ width: "160px" }}
           className="mr-4 h-auto!"
         >
-          <BookCard book={book} />
+          <BookCard book={book} lang={lang} />
         </SwiperSlide>
       ))}
 
       {showMore && (
         <SwiperSlide style={{ width: "160px" }} className="h-auto!">
           <Link
-            href={`/categories/${slugify(category)}`}
+            href={`/${lang}/categories/${slugify(category)}`}
             className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-40 h-60 text-white text-center transition-all duration-300 hover:scale-105"
           >
-            <span className="font-semibold text-lg">Show more</span>
+            <span className="font-semibold text-lg">{dict.home.showMore}</span>
             <span className="text-white/75 text-sm">
-              {totalCount - books.length} more
+              {totalCount - books.length} {dict.home.more}
             </span>
             <span className="mt-1 text-xl transition-transform group-hover:translate-x-1">
               &rarr;

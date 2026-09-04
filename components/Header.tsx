@@ -4,16 +4,23 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import NavLink from "./NavLink";
+import LanguageSwitcher from "./LanguageSwitcher";
+import type { Dictionary, Locale } from "@/data/i18n";
 
-const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/categories", label: "Categories" },
-  { href: "/about", label: "About" },
-  { href: "/contacts", label: "Contacts" },
-];
+interface HeaderProps {
+  lang: Locale;
+  dict: Dictionary;
+}
 
-export default function Header() {
+export default function Header({ lang, dict }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { href: `/${lang}`, label: dict.nav.home },
+    { href: `/${lang}/categories`, label: dict.nav.categories },
+    { href: `/${lang}/about`, label: dict.nav.about },
+    { href: `/${lang}/contacts`, label: dict.nav.contacts },
+  ];
 
   return (
     <header className="top-0 z-10 sticky bg-white/90 backdrop-blur border-zinc-200 border-b">
@@ -32,18 +39,23 @@ export default function Header() {
           />
         </Link>
 
-        {/* Desktop / tablet navigation */}
-        <nav className="hidden md:flex items-center gap-6 font-medium text-zinc-600 text-sm">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.href}
-              href={link.href}
-              className="relative py-1 hover:text-zinc-900 transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-zinc-900 after:transition-transform after:duration-300 hover:after:scale-x-100"
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
+        {/* Desktop navigation + language switcher */}
+        <div className="hidden md:flex items-center gap-4">
+          <nav className="flex items-center gap-6 font-medium text-zinc-600 text-sm">
+            {navLinks.map((link) => (
+              <NavLink
+                key={link.href}
+                href={link.href}
+                className="relative py-1 hover:text-zinc-900 transition-colors after:absolute after:inset-x-0 after:bottom-0 after:h-0.5 after:origin-left after:scale-x-0 after:bg-zinc-900 after:transition-transform after:duration-300 hover:after:scale-x-100"
+              >
+                {link.label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="w-px h-5 bg-zinc-200" aria-hidden />
+          <LanguageSwitcher lang={lang} variant="desktop" />
+        </div>
 
         {/* Mobile / tablet hamburger button */}
         <button
@@ -93,6 +105,11 @@ export default function Header() {
               </li>
             ))}
           </ul>
+
+          {/* Locale switcher — one row, all locales visible */}
+          <div className="mx-auto px-4 pb-3 w-full max-w-7xl">
+            <LanguageSwitcher lang={lang} variant="mobile" />
+          </div>
         </nav>
       )}
     </header>

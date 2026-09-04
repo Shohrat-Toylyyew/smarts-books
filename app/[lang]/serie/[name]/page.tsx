@@ -8,11 +8,12 @@ import {
   getSeriesSlug,
   getBookSlug,
 } from "@/data/books";
+import { defaultLocale, getDictionary, isLocale, type Locale } from "@/data/i18n";
 
 export const dynamicParams = true;
 
 interface PageProps {
-  params: Promise<{ name: string }>;
+  params: Promise<{ lang: string; name: string }>;
 }
 
 export async function generateMetadata({
@@ -32,7 +33,9 @@ export function generateStaticParams() {
 }
 
 export default async function SeriesPage({ params }: PageProps) {
-  const { name } = await params;
+  const { lang: rawLang, name } = await params;
+  const lang: Locale = isLocale(rawLang) ? rawLang : defaultLocale;
+  const dict = getDictionary(lang);
   const series = getSeriesBySlug(name);
 
   if (!series) notFound();
@@ -40,25 +43,25 @@ export default async function SeriesPage({ params }: PageProps) {
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <Link
-        href="/"
+        href={`/${lang}`}
         className="font-medium text-zinc-500 hover:text-zinc-900 text-sm transition-colors"
       >
-        &larr; Back to home
+        &larr; {dict.serie.back}
       </Link>
 
       <h1 className="mt-6 sm:mt-8 font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
         {series.name}
       </h1>
       <p className="mt-4 text-zinc-600 text-lg">
-        {series.books.length} {series.books.length === 1 ? "book" : "books"} in
-        this series.
+        {series.books.length}{" "}
+        {series.books.length === 1 ? dict.serie.booksOne : dict.serie.booksMany}
       </p>
 
       <ul className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10">
         {series.books.map((book) => (
           <li key={book.name}>
             <Link
-              href={`/book/${getBookSlug(book)}`}
+              href={`/${lang}/book/${getBookSlug(book)}`}
               className="group block bg-white p-6 border border-zinc-200 hover:border-zinc-400 hover:shadow-md rounded-xl transition-all duration-200"
             >
               <div className="flex items-start gap-4">

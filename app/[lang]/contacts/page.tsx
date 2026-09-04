@@ -1,38 +1,45 @@
-import type { Metadata } from "next";
 import ContactForm from "./ContactForm";
+import {
+  defaultLocale,
+  getDictionary,
+  isLocale,
+  type Locale,
+} from "@/data/i18n";
 
-export const metadata: Metadata = {
-  title: "Contacts — Smarts Books",
-  description:
-    "Get in touch with the Smarts Books team — email, phone, address and contact form.",
-};
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
 
-const contactDetails = [
-  {
-    label: "Email",
-    value: "toyliyevshohrat@gmail.com",
-    href: "mailto:toyliyevshohrat@gmail.com",
-  },
-  {
-    label: "Phone",
-    value: "+993 62 54 59 84",
-    href: "tel:+99362545984",
-  },
-  {
-    label: "Address",
-    value: "Dashoguz, Turkmenistan",
-    href: null,
-  },
-];
+export default async function ContactsPage({ params }: PageProps) {
+  const { lang: rawLang } = await params;
+  const lang: Locale = isLocale(rawLang) ? rawLang : defaultLocale;
+  const dict = getDictionary(lang);
 
-export default function ContactsPage() {
+  const contactDetails = [
+    {
+      label: dict.contacts.email,
+      value: "toyliyevshohrat@gmail.com",
+      href: "mailto:toyliyevshohrat@gmail.com",
+    },
+    {
+      label: dict.contacts.phone,
+      value: "+993 62 54 59 84",
+      href: "tel:+99362545984",
+    },
+    {
+      label: dict.contacts.address,
+      value: "Dashoguz, Turkmenistan",
+      href: null,
+    },
+  ];
+
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <h1 className="font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
-        Contacts
+        {dict.contacts.title}
       </h1>
       <p className="mt-4 text-zinc-600 text-lg">
-        Questions, suggestions or found a bug? We would love to hear from you.
+        {dict.contacts.subtitle}
       </p>
 
       <div className="gap-6 grid grid-cols-1 lg:grid-cols-2 mt-10">
@@ -60,12 +67,10 @@ export default function ContactsPage() {
             ))}
           </ul>
 
-          <p className="mt-6 text-zinc-500 text-sm">
-            We usually reply within 1–2 business days.
-          </p>
+          <p className="mt-6 text-zinc-500 text-sm">{dict.contacts.replyNote}</p>
         </div>
 
-        <ContactForm />
+        <ContactForm dict={dict.contacts} />
       </div>
     </div>
   );

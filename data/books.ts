@@ -37,7 +37,7 @@ export const categories = [
 export type Category = (typeof categories)[number];
 
 // All supported languages, in display order. `Language` is derived from this.
-export const languages = ["Russian", "English", "Turkmen", "Turkish"] as const;
+export const languages = ["Russian", "English", "Turkish"] as const;
 
 /** A language a book can be written in, e.g. "Русский". */
 export type Language = (typeof languages)[number];

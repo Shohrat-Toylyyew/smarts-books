@@ -1,36 +1,35 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { books, categories, getSeries, languages } from "@/data/books";
 import {
-  books,
-  categories,
-  getSeries,
-  languages,
-} from "@/data/books";
+  defaultLocale,
+  getDictionary,
+  isLocale,
+  type Locale,
+} from "@/data/i18n";
 
-export const metadata: Metadata = {
-  title: "About — Smarts Books",
-  description:
-    "Learn more about Smarts Books, a free catalog of books across categories and languages.",
-};
+interface PageProps {
+  params: Promise<{ lang: string }>;
+}
 
-const stats = [
-  { label: "Books", value: books.length },
-  { label: "Categories", value: categories.length },
-  { label: "Languages", value: languages.length },
-  { label: "Series", value: getSeries().length },
-];
+export default async function AboutPage({ params }: PageProps) {
+  const { lang: rawLang } = await params;
+  const lang: Locale = isLocale(rawLang) ? rawLang : defaultLocale;
+  const dict = getDictionary(lang);
 
-export default function AboutPage() {
+  const stats = [
+    { label: dict.about.books, value: books.length },
+    { label: dict.about.categories, value: categories.length },
+    { label: dict.about.languages, value: languages.length },
+    { label: dict.about.series, value: getSeries().length },
+  ];
+
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <h1 className="font-semibold text-zinc-900 text-3xl sm:text-5xl tracking-tight">
-        About
+        {dict.about.title}
       </h1>
       <p className="mt-4 max-w-2xl text-zinc-600 text-lg">
-        Smarts Books is a free online catalog where readers can discover books
-        across a wide range of categories — from fiction and history to
-        science, technology and fantasy — in Russian, English, Turkmen and
-        Turkish.
+        {dict.about.intro}
       </p>
 
       <ul className="gap-4 grid grid-cols-2 sm:grid-cols-4 mt-10">
@@ -49,53 +48,37 @@ export default function AboutPage() {
 
       <section className="mt-12 max-w-2xl">
         <h2 className="font-semibold text-zinc-900 text-2xl tracking-tight">
-          Our mission
+          {dict.about.missionTitle}
         </h2>
         <p className="mt-3 text-zinc-600">
-          We believe good books should be easy to find. Smarts Books brings
-          popular titles together in one place, organized by category, series
-          and language, so you can spend less time searching and more time
-          reading.
+          {dict.about.mission}
         </p>
       </section>
 
       <section className="mt-12 max-w-2xl">
         <h2 className="font-semibold text-zinc-900 text-2xl tracking-tight">
-          What you can do
+          {dict.about.canDoTitle}
         </h2>
         <ul className="space-y-3 mt-3 text-zinc-600 list-disc pl-5">
-          <li>
-            Browse the catalog by category on the{" "}
-            <Link
-              href="/categories"
-              className="text-zinc-900 underline underline-offset-4 hover:text-zinc-600 transition-colors"
-            >
-              Categories
-            </Link>{" "}
-            page.
-          </li>
-          <li>
-            Open a book to read its synopsis, learn about the author and find
-            a download link.
-          </li>
-          <li>Follow series to read books in the right order.</li>
-          <li>Filter by language: Russian, English, Turkmen or Turkish.</li>
+          {dict.about.canDo.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
         </ul>
       </section>
 
       <section className="mt-12 max-w-2xl">
         <h2 className="font-semibold text-zinc-900 text-2xl tracking-tight">
-          Have a question?
+          {dict.about.questionTitle}
         </h2>
         <p className="mt-3 text-zinc-600">
-          We are happy to hear from readers. Visit our{" "}
+          {dict.about.question.split(dict.about.contactsLink)[0]}
           <Link
-            href="/contacts"
+            href={`/${lang}/contacts`}
             className="text-zinc-900 underline underline-offset-4 hover:text-zinc-600 transition-colors"
           >
-            contacts page
-          </Link>{" "}
-          to get in touch with us.
+            {dict.about.contactsLink}
+          </Link>
+          {dict.about.question.split(dict.about.contactsLink)[1] ?? ""}
         </p>
       </section>
     </div>

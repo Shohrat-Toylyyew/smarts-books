@@ -2,12 +2,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { books, getBookBySlug, getBookSlug, getSeriesSlug } from "@/data/books";
+import {
+  books,
+  getBookBySlug,
+  getBookSlug,
+  getSeriesSlug,
+  languages,
+} from "@/data/books";
+import {
+  defaultLocale,
+  getDictionary,
+  isLocale,
+  type Locale,
+} from "@/data/i18n";
 
 export const dynamicParams = true;
 
 interface PageProps {
-  params: Promise<{ name: string }>;
+  params: Promise<{ lang: string; name: string }>;
 }
 
 export async function generateMetadata({
@@ -27,7 +39,9 @@ export function generateStaticParams() {
 }
 
 export default async function BookPage({ params }: PageProps) {
-  const { name } = await params;
+  const { lang: rawLang, name } = await params;
+  const lang: Locale = isLocale(rawLang) ? rawLang : defaultLocale;
+  const dict = getDictionary(lang);
   const book = getBookBySlug(name);
 
   if (!book) notFound();
@@ -35,14 +49,14 @@ export default async function BookPage({ params }: PageProps) {
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
       <Link
-        href="/"
+        href={`/${lang}`}
         className="font-medium text-zinc-500 hover:text-zinc-900 text-sm transition-colors"
       >
-        &larr; Back to home
+        &larr; {dict.book.back}
       </Link>
 
       <div className="flex sm:flex-row flex-col gap-6 sm:gap-10 mt-6 sm:mt-8">
-        <div className="relative bg-zinc-100 border border-zinc-200 rounded-xl w-48 sm:w-72 aspect-2/3 overflow-hidden shrink-0 mx-auto sm:mx-0">
+        <div className="relative bg-zinc-100 mx-auto sm:mx-0 border border-zinc-200 rounded-xl w-48 sm:w-72 aspect-2/3 overflow-hidden shrink-0">
           <Image
             src={book.poster}
             alt={`Cover of ${book.name}`}
@@ -70,11 +84,11 @@ export default async function BookPage({ params }: PageProps) {
                 key={category}
                 className="bg-zinc-50 px-3 py-1 border border-zinc-200 rounded-full font-medium text-zinc-600"
               >
-                {category}
+                {dict.categoryNames[category]}
               </li>
             ))}
             <li className="bg-zinc-50 px-3 py-1 border border-zinc-200 rounded-full font-medium text-zinc-600">
-              {book.language}
+              {dict.languageNames[book.language]}
             </li>
           </ul>
 
@@ -83,16 +97,16 @@ export default async function BookPage({ params }: PageProps) {
               href={book.downloadUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex justify-center items-center bg-zinc-900 hover:bg-zinc-700 active:scale-95 px-6 rounded-full h-12 font-medium text-white transition-all duration-200 hover:shadow-md"
+              className="inline-flex justify-center items-center bg-zinc-900 hover:bg-zinc-700 hover:shadow-md px-6 rounded-full h-12 font-medium text-white active:scale-95 transition-all duration-200"
             >
-              Download
+              {dict.book.download}
             </a>
             {book.series ? (
               <Link
-                href={`/serie/${getSeriesSlug(book.series)}`}
-                className="inline-flex justify-center items-center px-6 border border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 active:scale-95 rounded-full h-12 font-medium text-zinc-900 transition-all duration-200"
+                href={`/${lang}/serie/${getSeriesSlug(book.series)}`}
+                className="inline-flex justify-center items-center hover:bg-zinc-50 px-6 border border-zinc-200 hover:border-zinc-400 rounded-full h-12 font-medium text-zinc-900 active:scale-95 transition-all duration-200"
               >
-                Part of {book.series}
+                {dict.book.partOf} {book.series}
               </Link>
             ) : null}
           </div>
