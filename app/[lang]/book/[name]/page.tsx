@@ -7,7 +7,6 @@ import {
   getBookBySlug,
   getBookSlug,
   getSeriesSlug,
-  languages,
 } from "@/data/books";
 import {
   defaultLocale,

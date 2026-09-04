@@ -17,6 +17,11 @@ export type Dictionary = {
   /** Localized display names for every book language (keys are the English names). */
   languageNames: Record<Language, string>;
   home: { showMore: string; more: string };
+  search: {
+    title: string;
+    placeholder: string;
+    noResults: string;
+  };
   categories: { title: string; subtitle: string };
   category: { booksInCategoryOne: string; booksInCategoryMany: string };
   book: { back: string; download: string; partOf: string };
@@ -65,6 +70,11 @@ const en: Dictionary = {
     contacts: "Contacts",
   },
   home: { showMore: "Show more", more: "more" },
+  search: {
+    title: "Search",
+    placeholder: "Search books",
+    noResults: "No books found",
+  },
   categoryNames: {
     Fiction: "Fiction",
     "Non-Fiction": "Non-Fiction",
@@ -147,6 +157,11 @@ const ru: Dictionary = {
     contacts: "Контакты",
   },
   home: { showMore: "Показать ещё", more: "ещё" },
+  search: {
+    title: "Поиск",
+    placeholder: "Поиск книг",
+    noResults: "Книги не найдены",
+  },
   categoryNames: {
     Fiction: "Художественная литература",
     "Non-Fiction": "Нонфикшн",
@@ -229,6 +244,11 @@ const tr: Dictionary = {
     contacts: "İletişim",
   },
   home: { showMore: "Daha fazla", more: "daha" },
+  search: {
+    title: "Arama",
+    placeholder: "Kitap ara",
+    noResults: "Kitap bulunamadı",
+  },
   categoryNames: {
     Fiction: "Kurgu",
     "Non-Fiction": "Kurgu Dışı",
@@ -315,6 +335,11 @@ const tk: Dictionary = {
     contacts: "Habarlaşmak",
   },
   home: { showMore: "Goşmaça görkez", more: "goşmaça" },
+  search: {
+    title: "Gözleg",
+    placeholder: "Kitap gözläň",
+    noResults: "Kitap tapylmady",
+  },
   categoryNames: {
     Fiction: "Hyýaly eserler",
     "Non-Fiction": "Dokumental",
@@ -345,8 +370,8 @@ const tk: Dictionary = {
   },
   serie: {
     back: "Baş sahypa dolan",
-    booksOne: "kitap bu seride.",
-    booksMany: "kitap bu seride.",
+    booksOne: "kitap bu seriýada.",
+    booksMany: "kitap bu seriýada.",
   },
   about: {
     title: "Biz barada",

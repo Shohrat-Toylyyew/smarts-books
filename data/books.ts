@@ -185,6 +185,26 @@ export function getSeriesBySlug(slug: string): Series | undefined {
   return getSeries().find((series) => getSeriesSlug(series.name) === slug);
 }
 
+/**
+ * Searches books by name (case-insensitive substring match).
+ * Books whose name starts with the query are ranked first.
+ */
+export function searchBooks(query: string, limit?: number): Book[] {
+  const normalized = query.trim().toLowerCase();
+  if (!normalized) return [];
+
+  const matches = books.filter((book) =>
+    book.name.toLowerCase().includes(normalized),
+  );
+  matches.sort((a, b) => {
+    const aStarts = a.name.toLowerCase().startsWith(normalized) ? 0 : 1;
+    const bStarts = b.name.toLowerCase().startsWith(normalized) ? 0 : 1;
+    return aStarts - bStarts;
+  });
+
+  return limit ? matches.slice(0, limit) : matches;
+}
+
 /** Looks up a category by its URL slug. */
 export function getCategoryBySlug(slug: string): Category | undefined {
   return categories.find((category) => slugify(category) === slug);

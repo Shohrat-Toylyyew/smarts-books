@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import NavLink from "./NavLink";
 import LanguageSwitcher from "./LanguageSwitcher";
+import SearchBar from "./SearchBar";
 import type { Dictionary, Locale } from "@/data/i18n";
 
 interface HeaderProps {
@@ -41,6 +42,9 @@ export default function Header({ lang, dict }: HeaderProps) {
 
         {/* Desktop navigation + language switcher */}
         <div className="hidden md:flex items-center gap-4">
+          {/* Search — left of the header menus */}
+          <SearchBar lang={lang} dict={dict} className="w-36 lg:w-52" />
+
           <nav className="flex items-center gap-6 font-medium text-zinc-600 text-sm">
             {navLinks.map((link) => (
               <NavLink
@@ -92,6 +96,9 @@ export default function Header({ lang, dict }: HeaderProps) {
       {/* Mobile / tablet dropdown menu — fixed overlay below the header */}
       {menuOpen && (
         <nav className="fixed inset-x-0 top-16 sm:top-26 z-10 md:hidden bg-white border-zinc-200 border-b shadow-sm animate-fade-in-down">
+          <div className="mx-auto px-4 pt-3 w-full max-w-7xl">
+            <SearchBar lang={lang} dict={dict} />
+          </div>
           <ul className="mx-auto px-4 py-3 w-full max-w-7xl space-y-1">
             {navLinks.map((link) => (
               <li key={link.href}>
