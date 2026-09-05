@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Book } from "@/data/books";
-import { getBookSlug } from "@/data/books";
+import { getAuthorName, getBookSlug } from "@/data/books";
 import type { Dictionary, Locale } from "@/data/i18n";
 
 /**
@@ -34,7 +34,7 @@ export default function BookRow({
           {book.name}
         </h2>
         <p className="mt-1 text-zinc-600">
-          {book.author} &middot; {book.year}
+          {getAuthorName(book.authorId)} &middot; {book.year}
         </p>
         <p className="mt-3 text-zinc-700 line-clamp-4 leading-relaxed">
           {book.description}

@@ -7,7 +7,7 @@ import { defaultLocale, locales } from "@/data/i18n";
  *   /            ->  /en
  *   /categories  ->  /ru/categories  (based on Accept-Language / cookie)
  */
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const hasLocale = locales.some(
@@ -17,13 +17,14 @@ export function middleware(request: NextRequest) {
 
   // Prefer the saved cookie, then the browser's preferred language.
   const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
-  const preferred = cookieLocale && locales.includes(cookieLocale as never)
-    ? cookieLocale
-    : request.headers
-        .get("accept-language")
-        ?.split(",")
-        .map((part) => part.split(";")[0].trim().split("-")[0])
-        .find((lang) => locales.includes(lang as never));
+  const preferred =
+    cookieLocale && locales.includes(cookieLocale as never)
+      ? cookieLocale
+      : request.headers
+          .get("accept-language")
+          ?.split(",")
+          .map((part) => part.split(";")[0].trim().split("-")[0])
+          .find((lang) => locales.includes(lang as never));
 
   const locale = preferred ?? defaultLocale;
   const url = request.nextUrl.clone();

@@ -31,7 +31,7 @@ export default async function AuthorPage({ params }: PageProps) {
     );
   }
 
-  const authorBooks = getBooksByAuthor(author.name);
+  const authorBooks = getBooksByAuthor(author.id);
 
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">

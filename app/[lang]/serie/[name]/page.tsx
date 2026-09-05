@@ -7,6 +7,7 @@ import {
   getSeriesBySlug,
   getSeriesSlug,
   getBookSlug,
+  getAuthorName,
 } from "@/data/books";
 import {
   defaultLocale,
@@ -86,7 +87,7 @@ export default async function SeriesPage({ params }: PageProps) {
                     {book.name}
                   </h2>
                   <p className="mt-1 text-zinc-500 text-sm">
-                    {book.author} &middot; {book.year}
+                    {getAuthorName(book.authorId)} &middot; {book.year}
                   </p>
                 </div>
               </div>

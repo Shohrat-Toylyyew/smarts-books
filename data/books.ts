@@ -54,8 +54,8 @@ export interface Book {
   name: string;
   /** Short synopsis. */
   description: string;
-  /** Author name(s) */
-  author: string;
+  /** Author reference into `authors` in ./authors-data. */
+  authorId: number;
   /** One or more categories. */
   categories: Category[];
   /** Publication year. */
@@ -231,7 +231,7 @@ export function getAuthors(): AuthorWithCount[] {
   return authors
     .map((author) => ({
       ...author,
-      bookCount: books.filter((book) => book.author === author.name).length,
+      bookCount: books.filter((book) => book.authorId === author.id).length,
     }))
     .filter((author) => author.bookCount > 0);
 }
@@ -246,7 +246,12 @@ export function getAuthorBySlug(slug: string): AuthorWithCount | undefined {
   return getAuthors().find((author) => getAuthorSlug(author.name) === slug);
 }
 
-/** Returns all books written by the given author (exact `author` string). */
-export function getBooksByAuthor(name: string): Book[] {
-  return books.filter((book) => book.author === name);
+/** Returns all books written by the given author. */
+export function getBooksByAuthor(authorId: number): Book[] {
+  return books.filter((book) => book.authorId === authorId);
+}
+
+/** Convenience accessor for the display name of a book's author. */
+export function getAuthorName(authorId: number): string {
+  return authors.find((author) => author.id === authorId)?.name ?? "";
 }

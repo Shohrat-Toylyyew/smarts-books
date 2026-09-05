@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Book } from "@/data/books";
-import { getBookSlug } from "@/data/books";
+import { getAuthorName, getBookSlug } from "@/data/books";
 import type { Locale } from "@/data/i18n";
 
 interface BookCardProps {
@@ -27,7 +27,9 @@ export default function BookCard({ book, lang }: BookCardProps) {
       <h3 className="mt-3 font-medium text-zinc-900 group-hover:text-zinc-700 line-clamp-2">
         {book.name}
       </h3>
-      <p className="mt-1 text-zinc-500 text-sm line-clamp-1">{book.author}</p>
+      <p className="mt-1 text-zinc-500 text-sm line-clamp-1">
+        {getAuthorName(book.authorId)}
+      </p>
     </Link>
   );
 }
