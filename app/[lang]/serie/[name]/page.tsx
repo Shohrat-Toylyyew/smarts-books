@@ -5,9 +5,11 @@ import type { Metadata } from "next";
 import {
   getSeries,
   getSeriesBySlug,
+  getSeriesName,
   getSeriesSlug,
+  getBookName,
   getBookSlug,
-  getAuthorName,
+  getAuthorNameById,
 } from "@/data/books";
 import {
   defaultLocale,
@@ -26,17 +28,18 @@ interface PageProps {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { name } = await params;
+  const { lang: rawLang, name } = await params;
+  const lang: Locale = isLocale(rawLang) ? rawLang : defaultLocale;
   const series = getSeriesBySlug(name);
   if (!series) return { title: "Series not found" };
   return {
-    title: `${series.name} Series - Smarts Books`,
-    description: `${series.name} series with ${series.books.length} books.`,
+    title: `${getSeriesName(series, lang)} - Smarts Books`,
+    description: `${getSeriesName(series, lang)}: ${series.books.length}`,
   };
 }
 
 export function generateStaticParams() {
-  return getSeries().map((series) => ({ name: getSeriesSlug(series.name) }));
+  return getSeries().map((serie) => ({ name: getSeriesSlug(serie) }));
 }
 
 export default async function SeriesPage({ params }: PageProps) {
@@ -46,6 +49,8 @@ export default async function SeriesPage({ params }: PageProps) {
   const series = getSeriesBySlug(name);
 
   if (!series) notFound();
+
+  const seriesName = getSeriesName(series, lang);
 
   const bookCountText =
     series.books.length === 1 ? dict.serie.booksOne : dict.serie.booksMany;
@@ -62,12 +67,12 @@ export default async function SeriesPage({ params }: PageProps) {
       </Link>
 
       <div className="mt-10">
-        <TitlePage title={series.name} subtitle={subtitle} />
+        <TitlePage title={seriesName} subtitle={subtitle} />
       </div>
 
       <ul className="gap-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-10">
         {series.books.map((book) => (
-          <li key={book.name}>
+          <li key={book.id}>
             <Link
               href={`/${lang}/book/${getBookSlug(book)}`}
               className="group block bg-white hover:shadow-md p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-all duration-200"
@@ -75,8 +80,8 @@ export default async function SeriesPage({ params }: PageProps) {
               <div className="flex items-start gap-4">
                 <div className="relative bg-zinc-100 rounded-lg w-16 aspect-[2/3] overflow-hidden shrink-0">
                   <Image
-                    src={book.poster}
-                    alt={`Cover of ${book.name}`}
+                    src={book.cover}
+                    alt={getBookName(book, lang)}
                     fill
                     sizes="64px"
                     className="object-cover"
@@ -84,10 +89,11 @@ export default async function SeriesPage({ params }: PageProps) {
                 </div>
                 <div className="min-w-0">
                   <h2 className="font-medium text-zinc-900 group-hover:underline">
-                    {book.name}
+                    {getBookName(book, lang)}
                   </h2>
                   <p className="mt-1 text-zinc-500 text-sm">
-                    {getAuthorName(book.authorId)} &middot; {book.year}
+                    {getAuthorNameById(book.authorId, lang)} &middot;{" "}
+                    {book.year}
                   </p>
                 </div>
               </div>

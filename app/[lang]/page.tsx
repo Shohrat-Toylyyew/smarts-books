@@ -1,4 +1,9 @@
-import { categories, getBooksByCategory, slugify } from "@/data/books";
+import {
+  categories,
+  getBooksByCategory,
+  getCategoryName,
+  getCategorySlug,
+} from "@/data/books";
 import BookSwiper from "@/components/BookSwiper";
 import Link from "next/link";
 import {
@@ -28,12 +33,12 @@ export default async function Home({ params }: PageProps) {
 
         if (categoryBooks.length > 0) {
           return (
-            <section key={category} className="mt-10 first:mt-0">
+            <section key={category.id} className="mt-10 first:mt-0">
               <Link
-                href={`/${lang}/categories/${slugify(category)}`}
+                href={`/${lang}/categories/${getCategorySlug(category)}`}
                 className="after:bottom-0 after:absolute relative after:inset-x-0 after:bg-zinc-900 w-max after:h-1 font-bold text-zinc-900 text-3xl tracking-tight after:scale-x-0 hover:after:scale-x-100 after:origin-left after:transition-transform after:duration-300"
               >
-                {dict.categoryNames[category]}
+                {getCategoryName(category, lang)}
               </Link>
               <BookSwiper
                 category={category}

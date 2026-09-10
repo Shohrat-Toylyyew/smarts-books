@@ -6,13 +6,13 @@ import { FreeMode, Mousewheel } from "swiper/modules";
 // Core + specific module styles for a horizontal, free-drag carousel.
 import "swiper/css";
 import "swiper/css/free-mode";
-import type { Book } from "@/data/books";
-import { slugify } from "@/data/books";
+import type { Book, Category } from "@/data/books";
+import { getCategorySlug } from "@/data/books";
 import type { Dictionary, Locale } from "@/data/i18n";
 import BookCard from "./BookCard";
 
 interface BookSwiperProps {
-  category: string;
+  category: Category;
   books: Book[];
   /** Total number of books in this category (to label the Show More tile). */
   totalCount: number;
@@ -40,7 +40,7 @@ export default function BookSwiper({
     >
       {books.map((book) => (
         <SwiperSlide
-          key={book.name}
+          key={book.id}
           style={{ width: "160px" }}
           className="mr-4 h-auto!"
         >
@@ -51,7 +51,7 @@ export default function BookSwiper({
       {showMore && (
         <SwiperSlide style={{ width: "160px" }} className="h-auto!">
           <Link
-            href={`/${lang}/categories/${slugify(category)}`}
+            href={`/${lang}/categories/${getCategorySlug(category)}`}
             className="group flex flex-col justify-center items-center gap-2 bg-zinc-900/45 hover:bg-zinc-900/65 backdrop-blur-sm border border-zinc-200 rounded-xl w-40 h-60 text-white text-center hover:scale-105 transition-all duration-300"
           >
             <span className="font-semibold text-lg">{dict.home.showMore}</span>

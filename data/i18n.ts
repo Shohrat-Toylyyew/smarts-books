@@ -1,14 +1,7 @@
-import type { Category, Language } from "./books";
+export { locales, defaultLocale, isLocale } from "./locales";
+export type { Locale } from "./locales";
 
-export const locales = ["en", "ru", "tr", "tk"] as const;
-
-export type Locale = (typeof locales)[number];
-
-export const defaultLocale: Locale = "en";
-
-export function isLocale(value: string): value is Locale {
-  return locales.includes(value as Locale);
-}
+import type { Locale } from "./locales";
 
 export type Dictionary = {
   nav: {
@@ -18,10 +11,6 @@ export type Dictionary = {
     about: string;
     contacts: string;
   };
-  /** Localized display names for every category (keys are the English names). */
-  categoryNames: Record<Category, string>;
-  /** Localized display names for every book language (keys are the English names). */
-  languageNames: Record<Language, string>;
   home: { showMore: string; more: string };
   search: {
     title: string;
@@ -89,21 +78,6 @@ const en: Dictionary = {
     title: "Search",
     placeholder: "Search books",
     noResults: "No books found",
-  },
-  categoryNames: {
-    Fiction: "Fiction",
-    "Non-Fiction": "Non-Fiction",
-    Science: "Science",
-    Technology: "Technology",
-    History: "History",
-    Biography: "Biography",
-    Fantasy: "Fantasy",
-    Mystery: "Mystery",
-  },
-  languageNames: {
-    Russian: "Russian",
-    English: "English",
-    Turkish: "Turkish",
   },
   categories: {
     title: "Categories",
@@ -189,21 +163,6 @@ const ru: Dictionary = {
     placeholder: "Поиск книг",
     noResults: "Книги не найдены",
   },
-  categoryNames: {
-    Fiction: "Художественная литература",
-    "Non-Fiction": "Нонфикшн",
-    Science: "Наука",
-    Technology: "Технологии",
-    History: "История",
-    Biography: "Биографии",
-    Fantasy: "Фэнтези",
-    Mystery: "Детектив",
-  },
-  languageNames: {
-    Russian: "Русский",
-    English: "Английский",
-    Turkish: "Турецкий",
-  },
   categories: {
     title: "Категории",
     subtitle: "Выбирайте книги по категориям и находите идеальное чтение.",
@@ -287,21 +246,6 @@ const tr: Dictionary = {
     title: "Arama",
     placeholder: "Kitap ara",
     noResults: "Kitap bulunamadı",
-  },
-  categoryNames: {
-    Fiction: "Kurgu",
-    "Non-Fiction": "Kurgu Dışı",
-    Science: "Bilim",
-    Technology: "Teknoloji",
-    History: "Tarih",
-    Biography: "Biyografi",
-    Fantasy: "Fantastik",
-    Mystery: "Polisiye",
-  },
-  languageNames: {
-    Russian: "Rusça",
-    English: "İngilizce",
-    Turkish: "Türkçe",
   },
   categories: {
     title: "Kategoriler",
@@ -390,21 +334,6 @@ const tk: Dictionary = {
     title: "Gözleg",
     placeholder: "Kitap gözläň",
     noResults: "Kitap tapylmady",
-  },
-  categoryNames: {
-    Fiction: "Hyýaly eserler",
-    "Non-Fiction": "Dokumental",
-    Science: "Ylym",
-    Technology: "Tehnologiýa",
-    History: "Taryh",
-    Biography: "Biografiýa",
-    Fantasy: "Fantastika",
-    Mystery: "Detektiw",
-  },
-  languageNames: {
-    Russian: "Rus dili",
-    English: "Iňlis dili",
-    Turkish: "Türk dili",
   },
   categories: {
     title: "Kategoriýalar",

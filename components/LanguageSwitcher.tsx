@@ -2,14 +2,8 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { getLanguageNameByCode } from "@/data/books";
 import { locales, type Locale } from "@/data/i18n";
-
-const localeLabels: Record<Locale, string> = {
-  en: "EN",
-  ru: "RU",
-  tr: "TR",
-  tk: "TK",
-};
 
 interface LanguageSwitcherProps {
   lang: Locale;
@@ -89,7 +83,7 @@ export default function LanguageSwitcher({ lang, variant }: LanguageSwitcherProp
                 : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 hover:text-zinc-900"
             }`}
           >
-            {localeLabels[locale]}
+            {getLanguageNameByCode(locale, lang)}
           </button>
         ))}
       </div>
@@ -119,7 +113,7 @@ export default function LanguageSwitcher({ lang, variant }: LanguageSwitcherProp
             d="M12 21a9 9 0 100-18 9 9 0 000 18zm0 0c2.5-2.5 3.75-5.5 3.75-9S14.5 5.5 12 3m0 18c-2.5-2.5-3.75-5.5-3.75-9S9.5 5.5 12 3M3.5 9h17m-17 6h17"
           />
         </svg>
-        {localeLabels[lang]}
+        {getLanguageNameByCode(lang, lang)}
         <svg
           className={`w-3 h-3 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
           fill="none"
@@ -133,7 +127,7 @@ export default function LanguageSwitcher({ lang, variant }: LanguageSwitcherProp
       </button>
 
       {open && (
-        <ul className="right-0 absolute bg-white shadow-md border border-zinc-200 rounded-lg py-1 w-24 mt-1 animate-fade-in-down">
+        <ul className="right-0 absolute bg-white shadow-md border border-zinc-200 rounded-lg py-1 w-36 mt-1 animate-fade-in-down">
           {locales.map((locale) => (
             <li key={locale}>
               <button
@@ -146,7 +140,7 @@ export default function LanguageSwitcher({ lang, variant }: LanguageSwitcherProp
                     : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
                 }`}
               >
-                {localeLabels[locale]}
+                {getLanguageNameByCode(locale, lang)}
               </button>
             </li>
           ))}

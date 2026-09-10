@@ -8,6 +8,8 @@ import Image from "next/image";
 import {
   getAuthors,
   getAuthorBySlug,
+  getAuthorName,
+  getAuthorAbout,
   getAuthorSlug,
   getBooksByAuthor,
 } from "@/data/books";
@@ -33,6 +35,7 @@ export default async function AuthorPage({ params }: PageProps) {
   }
 
   const authorBooks = getBooksByAuthor(author.id);
+  const name = getAuthorName(author, lang);
 
   return (
     <div className="flex-1 mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full max-w-7xl">
@@ -41,14 +44,14 @@ export default async function AuthorPage({ params }: PageProps) {
         <div className="aspect-square w-32 sm:w-48 shrink-0">
           <Image
             src={author.image}
-            alt={author.name}
+            alt={name}
             width={192}
             height={192}
             className="w-full h-full object-contain"
           />
         </div>
         <div className="min-w-0">
-          <TitlePage title={author.name} />
+          <TitlePage title={name} />
 
           {/* Author info */}
           <ul className="flex flex-wrap items-center gap-2 mt-4 text-sm">
@@ -68,7 +71,7 @@ export default async function AuthorPage({ params }: PageProps) {
             </li>
           </ul>
           <p className="mt-4 max-w-3xl text-zinc-700 leading-relaxed">
-            {author.about}
+            {getAuthorAbout(author, lang)}
           </p>
         </div>
       </div>
@@ -79,7 +82,7 @@ export default async function AuthorPage({ params }: PageProps) {
       </h2>
       <div className="flex flex-col gap-4 mt-4">
         {authorBooks.map((book) => (
-          <BookRow key={book.id} book={book} lang={lang} dict={dict} />
+          <BookRow key={book.id} book={book} lang={lang} />
         ))}
       </div>
     </div>
@@ -92,7 +95,7 @@ export function generateStaticParams() {
     (lang) =>
       getAuthors().map((author) => ({
         lang: lang.lang,
-        authorName: getAuthorSlug(author.name),
+        authorName: getAuthorSlug(author),
       })),
   );
 }

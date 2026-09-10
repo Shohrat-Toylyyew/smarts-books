@@ -2,10 +2,11 @@
  * Smarts Books catalog — single public entry point.
  *
  * This module exposes the app's book domain:
- *   - Constants with their derived types (`categories`, `languages` and the
- *     `Category` / `Language` unions) — written once, here.
- *   - The `Book` / `Series` model types.
- *   - The raw `books` catalog (collected in `./books-data`) re-exported here.
+ *   - The raw, multilingual data (`books`, `authors`, `categories`,
+ *     `languages`, `series`) collected from the `*-data` modules.
+ *   - The model types (`Book`, `Author`, `Category`, `Language`, `Series`).
+ *   - Localized getters so every page can render fields in the current
+ *     i18n locale (`getBookName`, `getCategoryName`, ...).
  *   - Query and URL helper functions.
  *
  * Other parts of the app should only ever import from "@/data/books".
@@ -13,35 +14,84 @@
 
 import { books } from "./books-data";
 import { authors, type Author } from "./authors-data";
+import { categories, type Category } from "./categories-data";
+import { languages, type Language } from "./languages-data";
+import { series, type Series } from "./series-data";
+import { locales, type Locale } from "./locales";
 
-// Re-export the raw catalog so it can also be consumed from "@/data/books".
-export { books };
+// Re-export the raw multilingual catalog.
+export { books, authors, categories, languages, series };
+export type { Author, Category, Language, Series };
 
 // ---------------------------------------------------------------------------
-// Constants and derived types
+// Localized getters — every entity shows the field of the current i18n locale
 // ---------------------------------------------------------------------------
 
-// All available categories, in display order. The `Category` type is derived
-// from this array, so the two can never drift apart.
-export const categories = [
-  "Fiction",
-  "Non-Fiction",
-  "Science",
-  "Technology",
-  "History",
-  "Biography",
-  "Fantasy",
-  "Mystery",
-] as const;
+/**
+ * Reads the localized variant of a field (e.g. `name_ru`) for the locale,
+ * falling back to the English value and then to an empty string.
+ * `item` is expected to hold flat `field_locale` keys.
+ */
+export function getLocalizedField(
+  item: object,
+  field: string,
+  lang: Locale,
+): string {
+  const record = item as Record<string, string | undefined>;
+  return record[`${field}_${lang}`] || record[`${field}_en`] || "";
+}
 
-/** A single category a book can belong to, e.g. "Fantasy". */
-export type Category = (typeof categories)[number];
+/** Localized title of a book in the given locale. */
+export function getBookName(book: Book, lang: Locale): string {
+  return getLocalizedField(book, "name", lang);
+}
 
-// All supported languages, in display order. `Language` is derived from this.
-export const languages = ["Russian", "English", "Turkish"] as const;
+/** Localized synopsis of a book in the given locale. */
+export function getBookDescription(book: Book, lang: Locale): string {
+  return getLocalizedField(book, "description", lang);
+}
 
-/** A language a book can be written in, e.g. "Русский". */
-export type Language = (typeof languages)[number];
+/** Localized display name of a category in the given locale. */
+export function getCategoryName(category: Category, lang: Locale): string {
+  return getLocalizedField(category, "name", lang);
+}
+
+/** Localized display name of a series in the given locale. */
+export function getSeriesName(serie: Series, lang: Locale): string {
+  return getLocalizedField(serie, "name", lang);
+}
+
+/** Localized display name of a language in the given locale. */
+export function getLanguageName(language: Language, lang: Locale): string {
+  return getLocalizedField(language, "name", lang);
+}
+
+/** Localized display name of a language looked up by its code ("en", "ru"...). */
+export function getLanguageNameByCode(id: string, lang: Locale): string {
+  return getLocalizedField(
+    languages.find((language) => language.id === id) ?? {},
+    "name",
+    lang,
+  );
+}
+
+/** Localized display name of an author in the given locale. */
+export function getAuthorName(author: Author, lang: Locale): string {
+  return getLocalizedField(author, "name", lang);
+}
+
+/** Localized biography of an author in the given locale. */
+export function getAuthorAbout(author: Author, lang: Locale): string {
+  return getLocalizedField(author, "about", lang);
+}
+
+/** Convenience accessor for the localized display name of a book's author. */
+export function getAuthorNameById(authorId: number, lang: Locale): string {
+  return getAuthorName(
+    authors.find((author) => author.id === authorId) ?? ({} as Author),
+    lang,
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Model types
@@ -50,31 +100,40 @@ export type Language = (typeof languages)[number];
 /** A single book entry in the catalog. */
 export interface Book {
   id: number;
-  /** Book title. */
-  name: string;
-  /** Short synopsis. */
-  description: string;
+  /** Book title, one per locale. */
+  name_en: string;
+  name_ru: string;
+  name_tk: string;
+  name_tr: string;
+  /** Short synopsis, one per locale. */
+  description_en: string;
+  description_ru: string;
+  description_tk: string;
+  description_tr: string;
   /** Author reference into `authors` in ./authors-data. */
   authorId: number;
-  /** One or more categories. */
-  categories: Category[];
+  /** Referenced category ids from ./categories-data. */
+  categoryIds: number[];
   /** Publication year. */
   year: number;
-  /** Name of the series this book belongs to, if any. */
-  series?: string;
+  /** Referenced series id from ./series-data, if any. */
+  serieId?: number;
   /** Relative path to the cover image in /public. */
-  poster: string;
+  cover: string;
   /** Direct download URL for the book file. */
   downloadUrl: string;
-  /** Language the book is written in. */
-  language: Language;
+  /** Language code ("en" / "ru" / "tk" / "tr") of this edition. */
+  language: Language["id"];
 }
 
-/** A group of books that share a series name. */
-export interface Series {
-  name: string;
-  /** Books belonging to this series, in reading order. */
+/** A group of books sharing a series entity. */
+export interface SeriesWithBooks extends Series {
   books: Book[];
+}
+
+/** An author profile enriched with the number of their books in the catalog. */
+export interface AuthorWithCount extends Author {
+  bookCount: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -83,27 +142,35 @@ export interface Series {
 
 /** Returns books belonging to the given category. */
 export function getBooksByCategory(category: Category): Book[] {
-  return books.filter((book) => book.categories.includes(category));
+  return books.filter((book) => book.categoryIds.includes(category.id));
 }
 
-/** Convenience accessor for looking up a book by name. */
-export function getBook(name: string): Book | undefined {
-  return books.find((book) => book.name === name);
+/** Looks up a category by its id. */
+export function getCategoryById(id: number): Category | undefined {
+  return categories.find((category) => category.id === id);
 }
 
-/** Groups books by their series, ignoring standalone titles. */
-export function getSeries(): Series[] {
-  const grouped = new Map<string, Book[]>();
-  for (const book of books) {
-    if (!book.series) continue;
-    const list = grouped.get(book.series) ?? [];
-    list.push(book);
-    grouped.set(book.series, list);
-  }
-  return Array.from(grouped, ([name, seriesBooks]) => ({
-    name,
-    books: seriesBooks,
-  }));
+/** Looks up a series by its id. */
+export function getSeriesById(id: number): Series | undefined {
+  return series.find((serie) => serie.id === id);
+}
+
+/** Convenience accessor for looking up a book by its id. */
+export function getBook(id: number): Book | undefined {
+  return books.find((book) => book.id === id);
+}
+
+/**
+ * Groups books by their series entity, ignoring standalone titles.
+ * Every returned series carries its localized names plus its books.
+ */
+export function getSeries(): SeriesWithBooks[] {
+  return series
+    .map((serie) => ({
+      ...serie,
+      books: books.filter((book) => book.serieId === serie.id),
+    }))
+    .filter((serie) => serie.books.length > 0);
 }
 
 /**
@@ -166,14 +233,18 @@ function transliterate(text: string): string {
   });
 }
 
-/** Slug for a single book. */
+/**
+ * Slug for a single book. Books are identified by the title in their own
+ * edition language (e.g. the Russian edition slugs from its Russian title),
+ * keeping URLs stable and unique across language editions.
+ */
 export function getBookSlug(book: Book): string {
-  return slugify(book.name);
+  return slugify(book[`name_${book.language}`] ?? book.name_en);
 }
 
-/** Slug for a series name. */
-export function getSeriesSlug(name: string): string {
-  return slugify(name);
+/** Slug for a series, built from its canonical English name. */
+export function getSeriesSlug(serie: Series): string {
+  return slugify(serie.name_en);
 }
 
 /** Looks up a book by its URL slug. */
@@ -182,46 +253,45 @@ export function getBookBySlug(slug: string): Book | undefined {
 }
 
 /** Looks up a series by its URL slug. */
-export function getSeriesBySlug(slug: string): Series | undefined {
-  return getSeries().find((series) => getSeriesSlug(series.name) === slug);
+export function getSeriesBySlug(slug: string): SeriesWithBooks | undefined {
+  return getSeries().find((serie) => getSeriesSlug(serie) === slug);
+}
+
+/** Slug for a category, built from its canonical English name. */
+export function getCategorySlug(category: Category): string {
+  return slugify(category.name_en);
+}
+
+/** Looks up a category by its URL slug. */
+export function getCategoryBySlug(slug: string): Category | undefined {
+  return categories.find((category) => getCategorySlug(category) === slug);
 }
 
 /**
- * Searches books by name (case-insensitive substring match).
- * Books whose name starts with the query are ranked first.
+ * Searches books by title (case-insensitive substring match) across all
+ * locales. Books whose title starts with the query are ranked first.
  */
 export function searchBooks(query: string, limit?: number): Book[] {
   const normalized = query.trim().toLowerCase();
   if (!normalized) return [];
 
   const matches = books.filter((book) =>
-    book.name.toLowerCase().includes(normalized),
+    locales.some(
+      (locale) => book[`name_${locale}`].toLowerCase().includes(normalized),
+    ),
   );
-  matches.sort((a, b) => {
-    const aStarts = a.name.toLowerCase().startsWith(normalized) ? 0 : 1;
-    const bStarts = b.name.toLowerCase().startsWith(normalized) ? 0 : 1;
-    return aStarts - bStarts;
-  });
+  const startsWith = (book: Book) =>
+    locales.some(
+      (locale) => book[`name_${locale}`].toLowerCase().startsWith(normalized),
+    );
+  matches.sort((a, b) => Number(startsWith(b)) - Number(startsWith(a)));
 
   return limit ? matches.slice(0, limit) : matches;
-}
-
-/** Looks up a category by its URL slug. */
-export function getCategoryBySlug(slug: string): Category | undefined {
-  return categories.find((category) => slugify(category) === slug);
 }
 
 // ---------------------------------------------------------------------------
 // Authors
 // ---------------------------------------------------------------------------
-
-export type { Author };
-export { authors };
-
-/** An author profile enriched with the number of their books in the catalog. */
-export interface AuthorWithCount extends Author {
-  bookCount: number;
-}
 
 /**
  * All authors that have at least one book in the catalog,
@@ -236,22 +306,17 @@ export function getAuthors(): AuthorWithCount[] {
     .filter((author) => author.bookCount > 0);
 }
 
-/** Slug for an author name, e.g. "J.K. Rowling" -> "jk-rowling". */
-export function getAuthorSlug(name: string): string {
-  return slugify(name);
+/** Slug for an author, built from their canonical English name. */
+export function getAuthorSlug(author: Author): string {
+  return slugify(author.name_en);
 }
 
 /** Looks up an author by their URL slug. */
 export function getAuthorBySlug(slug: string): AuthorWithCount | undefined {
-  return getAuthors().find((author) => getAuthorSlug(author.name) === slug);
+  return getAuthors().find((author) => getAuthorSlug(author) === slug);
 }
 
 /** Returns all books written by the given author. */
 export function getBooksByAuthor(authorId: number): Book[] {
   return books.filter((book) => book.authorId === authorId);
-}
-
-/** Convenience accessor for the display name of a book's author. */
-export function getAuthorName(authorId: number): string {
-  return authors.find((author) => author.id === authorId)?.name ?? "";
 }

@@ -44,7 +44,7 @@ export default function SearchBar({ lang, dict, className }: SearchBarProps) {
       }
       try {
         const response = await fetch(
-          `/api/search?q=${encodeURIComponent(trimmed)}`,
+          `/api/search?q=${encodeURIComponent(trimmed)}&lang=${lang}`,
         );
         if (!response.ok) return;
         const data = (await response.json()) as { results: Suggestion[] };
@@ -56,7 +56,7 @@ export default function SearchBar({ lang, dict, className }: SearchBarProps) {
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, lang]);
 
   // Close the dropdown on outside click, Escape or blur.
   useEffect(() => {

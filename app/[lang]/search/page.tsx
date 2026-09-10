@@ -30,7 +30,7 @@ export default async function SearchPage({ params, searchParams }: PageProps) {
       {/* Results — most relevant first, all in the same row style */}
       <div className="flex flex-col gap-4 mt-8">
         {results.map((book) => (
-          <BookRow key={book.id} book={book} lang={lang} dict={dict} />
+          <BookRow key={book.id} book={book} lang={lang} />
         ))}
       </div>
 

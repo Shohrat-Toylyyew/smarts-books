@@ -1,4 +1,4 @@
-import { categories, getBooksByCategory, slugify } from "@/data/books";
+import { categories, getBooksByCategory, getCategoryName, getCategorySlug } from "@/data/books";
 import Link from "next/link";
 import {
   defaultLocale,
@@ -29,15 +29,15 @@ export default async function CategoriesPage({ params }: PageProps) {
           const count = getBooksByCategory(category).length;
           return (
             <li
-              key={category}
+              key={category.id}
               className="bg-white hover:shadow-md p-6 border border-zinc-200 hover:border-zinc-400 rounded-xl transition-all hover:-translate-y-0.5 duration-200"
             >
               <Link
-                href={`/${lang}/categories/${slugify(category)}`}
+                href={`/${lang}/categories/${getCategorySlug(category)}`}
                 className="flex justify-between"
               >
                 <h2 className="font-medium text-zinc-900 text-lg">
-                  {dict.categoryNames[category]}
+                  {getCategoryName(category, lang)}
                 </h2>
                 <span className="text-zinc-600">{count}</span>
               </Link>
